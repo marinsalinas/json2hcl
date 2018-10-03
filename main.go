@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/hashicorp/hcl"
@@ -12,7 +14,7 @@ import (
 	jsonParser "github.com/hashicorp/hcl/json/parser"
 )
 
-// VERSION is what is returned by the `-v` flag
+// Version is what is returned by the `-v` flag
 var Version = "development"
 
 func main() {
@@ -28,7 +30,17 @@ func main() {
 	if *reverse {
 		err = toJSON()
 	} else {
-		err = toHCL()
+		//err = toHCL()
+		input, err := ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			log.Fatalf("unable to read from stdin: %s", err)
+		}
+		hclString, err2 := ToHCLFromJSONString(string(input))
+		if err2 != nil {
+			log.Fatalf("unable to convert to HCL String: %s", err2)
+		}
+		fmt.Println(hclString)
+
 	}
 
 	if err != nil {
@@ -76,4 +88,30 @@ func toHCL() error {
 	}
 
 	return nil
+}
+
+//ToHCLFromJSONString ...
+func ToHCLFromJSONString(jsonString string) (string, error) {
+	ast, err := hcl.Parse(jsonString)
+
+	if err != nil {
+		return "", fmt.Errorf("unable to parse JSON: %s", err)
+	}
+
+	writer := bytes.NewBuffer([]byte(""))
+
+	err = printer.Fprint(writer, ast)
+	if err != nil {
+		return "", fmt.Errorf("unable to print HCL: %s", err)
+	}
+	//result := writer.String()
+	// result, e := hclStrconv.Unquote(writer.String())
+	// if e != nil {
+	// 	return "", e
+	// }
+	res, errrr := printer.Format(writer.Bytes())
+	if errrr != nil {
+		return "", errrr
+	}
+	return string(res), nil
 }
