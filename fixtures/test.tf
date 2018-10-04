@@ -154,7 +154,7 @@
   "ami" = "ami-00232ad584ddcf6a4"
 
   "connection" = {
-    "private_key" = "${file(\"${var.private_key_path}/${var.key_name}\")}"
+    "private_key" = "${file("${var.private_key_path}/${var.key_name}")}"
 
     "user" = "ec2-user"
   }

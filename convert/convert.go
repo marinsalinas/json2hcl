@@ -22,11 +22,6 @@ func ToHCLFromJSONString(jsonString string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("unable to print HCL: %s", err)
 	}
-	//result := writer.String()
-	// result, e := hclStrconv.Unquote(writer.String())
-	// if e != nil {
-	// 	return "", e
-	// }
 	res, errrr := printer.Format(writer.Bytes())
 	if errrr != nil {
 		return "", errrr
