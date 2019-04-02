@@ -1,4 +1,4 @@
-module github.com/mrodriguezio/json2hcl
+module github.com/marinsalinas/json2hcl
 
 go 1.12
 

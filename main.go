@@ -11,7 +11,7 @@ import (
 	"github.com/hashicorp/hcl"
 	"github.com/hashicorp/hcl/hcl/printer"
 	jsonParser "github.com/hashicorp/hcl/json/parser"
-	"github.com/mrodriguezio/json2hcl/convert"
+	"github.com/marinsalinas/json2hcl/convert"
 )
 
 // Version is what is returned by the `-v` flag
